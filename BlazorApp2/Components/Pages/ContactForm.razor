@@ -1,52 +1,70 @@
 @page "/Contact"
 @using BlazorApp2.Components.Model
+@rendermode InteractiveServer
 
-<EditForm Model="@user" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<RadzenStack Orientation="Orientation.Vertical" Style="padding: 2rem;">
+    <RadzenTemplateForm TItem="User" Data="@user" Submit="@HandleValidSubmit">
 
-    <div>
-        <label>Fornavn:</label>
-        <InputText @bind-Value="user.FirstName" />
-        <ValidationMessage For="@(() => user.FirstName)" />
-    </div>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="7%" AlignItems="AlignItems.Center">
+            <RadzenFormField Text="Fornavn" Style="width: 20%;">
+                <ChildContent>
+                    <RadzenTextBox Name="FirstName" @bind-Value="@user.FirstName"/>
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="FirstName" Text="Fornavn er påkrævet" Popup="true" Style="position:absolute; z-index: 2;"/>
+                </Helper>
+            </RadzenFormField>
 
-    <div>
-        <label>Efternavn:</label>
-        <InputText @bind-Value="user.LastName" />
-        <ValidationMessage For="@(() => user.LastName)" />
-    </div>
+            <RadzenFormField Text="Efternavn" Style="width: 20%;">
+                <ChildContent>
+                    <RadzenTextBox Name="LastName" @bind-Value="@user.LastName"/>
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="LastName" Text="Efternavn er påkrævet" Popup="true" Style="position:absolute; z-index: 2;"/>
+                </Helper>
+            </RadzenFormField>
+        </RadzenStack>
 
-    <div>
-        <label>Email:</label>
-        <InputText @bind-Value="user.Email" />
-        <ValidationMessage For="@(() => user.Email)" />
-    </div>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="5%" Style="margin-top: 1rem;">
+            <RadzenFormField Text="Email" Style="width: 40%;">
+                <ChildContent>
+                    <RadzenTextBox Name="Email" @bind-Value="@user.Email" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="Email" Text="Email er påkrævet" Popup="true" Style="position:absolute; z-index: 2;" />
+                    <RadzenEmailValidator Component="Email" Text="Angiv en reel email" Popup=true Style="position: absolute; z-index: 2;" />
+                </Helper>
+            </RadzenFormField>
+        </RadzenStack>
 
-    <div>
-        <label>Telefon Nummer:</label>
-        <InputText @bind-Value="user.PhoneNumber" />
-        <ValidationMessage For="@(() => user.PhoneNumber)" />
-    </div>
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="5%" Style="margin-top: 1rem;">
+            <RadzenFormField Text="Telefonnummer" Style="width: 40%;">
+                <ChildContent>
+                    <RadzenTextBox Name="PhoneNumber" @bind-Value="@user.PhoneNumber" />
+                </ChildContent>
+                <Helper>
+                    <RadzenRequiredValidator Component="PhoneNumber" Text="Telefonnummer er påkrævet" Popup="true" Style="position:absolute; z-index: 2;" />
+                    <RadzenRegexValidator 
+                        Component="PhoneNumber" 
+                        Pattern="^\+\d{2}\s?\d{8}$" 
+                        Text="Telefonnummer skal starte med fx +45 12345678" 
+                        Popup="true" 
+                        Style="position:absolute;" />
+                </Helper>
+            </RadzenFormField>
+        </RadzenStack>
 
-    <button type="submit">Send</button>
-</EditForm>
-
-@if (submitted)
-{
-    <h4>Resultat:</h4>
-    <p><strong>Fornavn:</strong> @user.FirstName</p>
-    <p><strong>Efternavn:</strong> @user.LastName</p>
-    <p><strong>Email:</strong> @user.Email</p>
-    <p><strong>Telefon Nummer:</strong> @user.PhoneNumber</p>
-}
+        <RadzenStack AlignItems="AlignItems.Center" Style="margin-top: 2rem;">
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Gem" Style="width: 40%;" />
+        </RadzenStack>
+    </RadzenTemplateForm>
+</RadzenStack>
 
 @code {
     private User user = new();
-    private bool submitted = false;
 
-    private void HandleValidSubmit()
+    private void HandleValidSubmit(User user)
     {
-        submitted = true;
+        Console.WriteLine($"{user.FirstName}\n{user.LastName}\n{user.Email}\n{user.PhoneNumber}");
     }
 }
