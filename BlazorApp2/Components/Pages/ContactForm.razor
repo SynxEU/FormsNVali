@@ -1,0 +1,52 @@
+@page "/Contact"
+@using BlazorApp2.Components.Model
+
+<EditForm Model="@user" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Fornavn:</label>
+        <InputText @bind-Value="user.FirstName" />
+        <ValidationMessage For="@(() => user.FirstName)" />
+    </div>
+
+    <div>
+        <label>Efternavn:</label>
+        <InputText @bind-Value="user.LastName" />
+        <ValidationMessage For="@(() => user.LastName)" />
+    </div>
+
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value="user.Email" />
+        <ValidationMessage For="@(() => user.Email)" />
+    </div>
+
+    <div>
+        <label>Telefon Nummer:</label>
+        <InputText @bind-Value="user.PhoneNumber" />
+        <ValidationMessage For="@(() => user.PhoneNumber)" />
+    </div>
+
+    <button type="submit">Send</button>
+</EditForm>
+
+@if (submitted)
+{
+    <h4>Resultat:</h4>
+    <p><strong>Fornavn:</strong> @user.FirstName</p>
+    <p><strong>Efternavn:</strong> @user.LastName</p>
+    <p><strong>Email:</strong> @user.Email</p>
+    <p><strong>Telefon Nummer:</strong> @user.PhoneNumber</p>
+}
+
+@code {
+    private User user = new();
+    private bool submitted = false;
+
+    private void HandleValidSubmit()
+    {
+        submitted = true;
+    }
+}
